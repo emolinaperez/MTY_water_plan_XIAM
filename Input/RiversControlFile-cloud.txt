@@ -1,0 +1,9 @@
+Rio Pablillo_Camacho.Inflow: file="C:\Users\Administrator\Documents\Edmundo\Projectos\Phase2MTY\ModeloRiverware\Input\RioPablillo_CamachoInflow.txt"
+Rio Panuco MTY VI.Inflow: file="C:\Users\Administrator\Documents\Edmundo\Projectos\Phase2MTY\ModeloRiverware\Input\RioPanucoMTYVIInflow.txt"
+Rio San Juan 1.Inflow: file="C:\Users\Administrator\Documents\Edmundo\Projectos\Phase2MTY\ModeloRiverware\Input\RioSanJuan1Inflow.txt"
+La Boca.Inflow: file="C:\Users\Administrator\Documents\Edmundo\Projectos\Phase2MTY\ModeloRiverware\Input\LaBocaInflow.txt"
+Vicente Guerrero.Inflow: file="C:\Users\Administrator\Documents\Edmundo\Projectos\Phase2MTY\ModeloRiverware\Input\VicenteGuerreroInflow.txt"
+Presa La Libertad.Inflow: file="C:\Users\Administrator\Documents\Edmundo\Projectos\Phase2MTY\ModeloRiverware\Input\LaLibertad_Inflow.txt"
+Rio Pesqueria.Inflow: file="C:\Users\Administrator\Documents\Edmundo\Projectos\Phase2MTY\ModeloRiverware\Input\Pesqueria_Inflow.txt"
+
+

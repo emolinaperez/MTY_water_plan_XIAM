@@ -1,0 +1,139 @@
+
+#Set environment variables
+ set env(MODEL_DIR) C:/Users/L03054557/Edmundo-ITESM/Proyectos/ProjectoAguaMty/Phase2MTY/ModeloRiverware
+ SetEnv MODEL_DIR $env(MODEL_DIR)
+
+#Load the model
+ OpenWorkspace $env(MODEL_DIR)/System/Modelo_AMM_23_05_2017_test.mdl
+
+#Load the rules
+ LoadRules $env(MODEL_DIR)/System/Rules_AMM_23_05_2017.rls
+
+#Set run dates
+ SetRunInfo #RunInfo !InitDate {January, 2039}
+ SetRunInfo #RunInfo !EndDate {December, 2050}
+
+#Set initial conditions
+#surface reservoirs
+ SetSlot {La Boca.Storage} {January,2039} 39.4
+ SetSlot {La Boca.Pool Elevation} {January,2039} 448.52
+ SetSlot {El Cuchillo.Storage} {January,2039} 1123
+ SetSlot {El Cuchillo.Pool Elevation} {January,2039} 162.35
+ SetSlot {Cerro Prieto.Storage} {January,2039} 300
+ SetSlot {Cerro Prieto.Pool Elevation} {January,2039} 282.52
+ SetSlot {Marte R Gomez.Storage} {January,2039} 781
+ SetSlot {Marte R Gomez.Pool Elevation} {January,2039} 76.3
+ SetSlot {Las Blancas.Storage} {January,2039} 83
+ SetSlot {Las Blancas.Pool Elevation} {January,2039} 89.86
+ SetSlot {Vicente Guerrero.Storage} {January,2039} 820
+ SetSlot {Vicente Guerrero.Pool Elevation} {January,2039} 129.09
+#groundwater reservoirs
+ SetSlot {Campo Mina.Storage} {January,2039} 90
+ SetSlot {Pozos Area Metropolitana.Storage} {January,2039} 3
+ SetSlot {Campo Buenos Aires.Storage} {January,2039} 300
+ SetSlot {Sistema Santiago Huajuco.Storage} {January,2039} 250
+#others
+ SetSlot {Cerro Prieto.Diversion Capacity} 5.40
+ SetSlot {La Boca.Diversion Capacity}  0.92
+ SetSlot {El Cuchillo.Diversion Capacity} 4.78
+
+#Set number of months in simulations
+ set mths 143
+SetSlot Analisis.Meses $mths
+
+#input x portfolio into riverware model
+  set x1 0
+set x2 1
+set x3 0
+set x4 0
+set x5 0
+set x6 0
+set x7 1
+set x8 0
+set x9 0
+set x10 1
+set x11 0
+set x12 0
+set x13 1
+
+ SetSlot ProjectsTable.x1 $x1
+ SetSlot ProjectsTable.x2 $x2
+ SetSlot ProjectsTable.x3 $x3
+ SetSlot ProjectsTable.x4 $x4
+ SetSlot ProjectsTable.x5 $x5
+ SetSlot ProjectsTable.x6 $x6
+ SetSlot ProjectsTable.x7 $x7
+ SetSlot ProjectsTable.x8 $x8
+ SetSlot ProjectsTable.x9 $x9
+ SetSlot ProjectsTable.x10 $x10
+ SetSlot ProjectsTable.x11 $x11
+ SetSlot ProjectsTable.x12 $x12
+ SetSlot ProjectsTable.x13 $x13
+
+#run Input DMIs
+ InvokeDMI ParametersDMI
+ InvokeDMI DemandScenarioDMI
+ InvokeDMI ClimateScenarioDMI
+
+# run the simulation
+ StartController
+
+#Print result
+ set v [GetSlot Analisis.Confiabilidad]
+ puts $v
+
+ set v1 [GetSlot {La Boca.Storage} {January,2050}]
+ puts $v1
+
+ set v2 [GetSlot {La Boca.Pool Elevation} {January,2050}]
+ puts $v2
+
+ set v3 [GetSlot {El Cuchillo.Storage} {January,2050}]
+ puts $v3
+
+ set v4 [GetSlot {El Cuchillo.Pool Elevation} {January,2050}]
+ puts $v4
+
+ set v5 [GetSlot {Cerro Prieto.Storage} {January,2050}]
+ puts $v5
+
+ set v6 [GetSlot {Cerro Prieto.Pool Elevation} {January,2050}]
+ puts $v6
+
+ set v7 [GetSlot {Marte R Gomez.Storage} {January,2050}]
+ puts $v7
+
+ set v8 [GetSlot {Marte R Gomez.Pool Elevation} {January,2050}]
+ puts $v8
+
+ set v9 [GetSlot {Las Blancas.Storage} {January,2050}]
+ puts $v9
+
+ set v10 [GetSlot {Las Blancas.Pool Elevation} {January,2050}]
+ puts $v10
+
+ set v11 [GetSlot {Vicente Guerrero.Storage} {January,2050}]
+ puts $v11
+
+ set v12 [GetSlot {Vicente Guerrero.Pool Elevation} {January,2050}]
+ puts $v12
+
+ set v13 [GetSlot {Campo Mina.Storage} {January,2050}]
+ puts $v13
+
+ set v14 [GetSlot {Pozos Area Metropolitana.Storage} {January,2050}]
+ puts $v14
+
+ set v15 [GetSlot {Campo Buenos Aires.Storage} {January,2050}]
+ puts $v15
+
+ set v16 [GetSlot {Sistema Santiago Huajuco.Storage} {January,2050}]
+ puts $v16
+
+ GetRunInfo #RunInfo !InitDate
+ GetRunInfo #RunInfo !EndDate
+# GetRunInfo #RunInfo !Step
+
+# Close the opened model and exit RiverWare
+ CloseWorkspace
+

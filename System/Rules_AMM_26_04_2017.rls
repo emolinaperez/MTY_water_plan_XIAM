@@ -1,0 +1,305 @@
+# RiverWare_Ruleset 7.0.6 Patch
+# Created 18:08 April 26, 2017
+# 
+RULESET
+NAME "Rules_AMM_25_04_2017";
+AGENDA_ORDER ASCENDING;
+DESCRIPTION "";
+PRECISION   8;
+BEGIN
+
+  POLICY_GROUP   "Operaci?n_Presas";
+  DESCRIPTION    "";
+  ACTIVE         TRUE;
+  BEGIN
+
+    RULE                 "Rule_LaBoca";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "DiversionObject1.Diversion" [] := IF ( $ "La Boca.Storage" [@"t - 1"] - 5.57000000 "MCM" >= 2.46000000 "MCM" )
+ THEN
+  $ "La Boca.Diversion Capacity" []
+ ELSE
+  IF ( $ "La Boca.Storage" [@"t - 1"] < 5.57000000 "MCM" )
+  THEN
+   0.00000000 "cms"
+  ELSE
+   "VolumeToFlow"( $ "La Boca.Storage" [@"t - 1"] - 5.57000000 "MCM", @"t" )
+  ENDIF
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_CerroPrieto";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "DiversionObject2.Diversion" [] := IF ( $ "Cerro Prieto.Storage" [@"t - 1"] - 51.66000000 "MCM" > 14.00000000 "MCM" )
+ THEN
+  $ "Cerro Prieto.Diversion Capacity" []
+ ELSE
+  IF ( $ "Cerro Prieto.Storage" [@"t - 1"] < 51.66000000 "MCM" )
+  THEN
+   0.00000000 "cms"
+  ELSE
+   "VolumeToFlow"( $ "Cerro Prieto.Storage" [@"t - 1"] - 51.66000000 "MCM", @"t" )
+  ENDIF
+ ENDIF;
+
+    END;
+
+    RULE                 "Trasvase";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "El Cuchillo.Regulated Spill" [@"24:00:00 November Max DayOfMonth, Current Year"] := IF ( $ "El Cuchillo.Storage" [@"t - 1"] > $ "DataObj1.NIVEL_CUCHILLO_TRASVASE" [] AND $ "Marte R Gomez.Storage" [@"t - 1"] < 700.00000000 "MCM" )
+ THEN
+  $ "DataObj1.Trasvase 3"
+ ELSE
+  $ "DataObj1.Trasvase 0"
+ ENDIF [];
+
+    END;
+
+    RULE                 "Rule_ElCuchillo";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "DiversionObject3.Diversion" [] := IF ( $ "ProjectsTable.Table" [0.00000000, 3.00000000] > 0.00000000 )
+ THEN
+  IF ( $ "El Cuchillo.Storage" [@"t - 1"] - 202.32000000 "MCM" > 26.80000000 "MCM" )
+  THEN
+   $ "El Cuchillo.Diversion Capacity" [] * 2.09000000
+  ELSE
+   IF ( $ "El Cuchillo.Storage" [@"t - 1"] < 202.32000000 "MCM" )
+   THEN
+    0.00000000 "cms"
+   ELSE
+    "VolumeToFlow"( $ "El Cuchillo.Storage" [@"t - 1"] - 202.32000000 "MCM", @"t" )
+   ENDIF
+  ENDIF
+ ELSE
+  IF ( $ "El Cuchillo.Storage" [@"t - 1"] - 202.32000000 "MCM" > 12.80000000 "MCM" )
+  THEN
+   $ "El Cuchillo.Diversion Capacity" []
+  ELSE
+   IF ( $ "El Cuchillo.Storage" [@"t - 1"] < 202.32000000 "MCM" )
+   THEN
+    0.00000000 "cms"
+   ELSE
+    "VolumeToFlow"( $ "El Cuchillo.Storage" [@"t - 1"] - 202.32000000 "MCM", @"t" )
+   ENDIF
+  ENDIF
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_LasBlancas2";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Las Blancas.Diversion" [] := IF ( $ "Las Blancas.Storage" [@"t - 1"] > 15.52000000 "MCM" )
+ THEN
+  $ "DataObj1.Trasvase Las Blancas" []
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_LasBlancas";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Las Blancas.Release" [] := IF ( $ "Las Blancas.Storage" [@"t - 1"] > 15.52000000 "MCM" )
+ THEN
+  0.00000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Extracciones_BAires";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Campo Buenos Aires.Pumped Flow" [] := IF ( $ "Campo Buenos Aires.Storage" [@"t - 1"] > 10.00000000 "MCM" )
+ THEN
+  1.98000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Extracciones_Mina";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Campo Mina.Pumped Flow" [] := IF ( $ "Campo Mina.Storage" [@"t - 1"] > 10.00000000 "MCM" )
+ THEN
+  0.84000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Extracciones_AMM";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Pozos Area Metropolitana.Pumped Flow" [] := IF ( $ "Pozos Area Metropolitana.Storage" [@"t - 1"] > 1.00000000 "MCM" )
+ THEN
+  0.87800000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Extracciones_Santiago";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Sistema Santiago Huajuco.Pumped Flow" [] := IF ( $ "Sistema Santiago Huajuco.Storage" [@"t - 1"] > 4.00000000 "MCM" )
+ THEN
+  1.10000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+  END;
+
+  POLICY_GROUP   "AMM";
+  DESCRIPTION    "";
+  ACTIVE         TRUE;
+  BEGIN
+
+    RULE                 "Demanda Monterrey";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Area Metropolitana de Monterrey.Diversion Requested" [] := $ "Analisis.Demanda Monterrey" [];
+
+    END;
+
+    RULE                 "Agua derivada a Pesqueria";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Plantas de Tratamiento.Normal Flow" [] := $ "Plantas de Tratamiento.Gage Inflow" [] - $ "Plantas de Tratamiento.Condition One" [] + $ "DataObj2.Pozos Privados" [];
+
+    END;
+
+    RULE                 "Agua tratada a la industria";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Plantas de Tratamiento.Condition One" [] := $ "Plantas de Tratamiento.Gage Inflow" [] * 0.10000000;
+
+    END;
+
+    RULE                 "Oferta total actual";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Area Metropolitana de Monterrey.Incoming Available Water" [] := $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + ( $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] ) + $ "Sistema Santiago Huajuco.Pumped Flow" [];
+
+    END;
+
+  END;
+
+  POLICY_GROUP   "Alternativas";
+  DESCRIPTION    "";
+  ACTIVE         TRUE;
+  NAMES_COLOR  "#ff5500";
+  BEGIN
+
+    RULE                 "Rule_VGuerrero";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "DiversionObject4.Diversion" [] := IF ( $ "Vicente Guerrero.Pool Elevation" [@"t - 1"] > 131.00000000 "m" )
+ THEN
+  $ "DataObj3.Extracciones_VGuerrero" []
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+      $ "Vicente Guerrero.Release" [] := IF ( $ "Vicente Guerrero.Pool Elevation" [@"t - 1"] > 131.00000000 "m" )
+ THEN
+  5.00000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_Panuco";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Rio Panuco MTY VI.Available For Diversion" [] := IF ( $ "Rio Panuco MTY VI.Outflow" [] > $ "Rio Panuco MTY VI.Diversion Capacity" [] )
+ THEN
+  $ "Rio Panuco MTY VI.Diversion Capacity" []
+ ELSE
+  0.00000000
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_Libertad";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "La Libertad.Diversion" [] := IF ( $ "La Libertad.Inflow" [] > $ "Rio Panuco MTY VI.Diversion Capacity" [] )
+ THEN
+  $ "Rio Panuco MTY VI.Diversion Capacity" []
+ ELSE
+  0.00000000
+ ENDIF;
+
+    END;
+
+  END;
+
+END

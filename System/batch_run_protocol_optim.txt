@@ -1,0 +1,37 @@
+# Set environment variables
+ set env(MODEL_DIR) C:/Users/L03054557/Edmundo-ITESM/Proyectos/ProjectoAguaMty/Phase2MTY/ModeloRiverware
+ SetEnv MODEL_DIR $env(MODEL_DIR)
+
+
+# Load the model
+ OpenWorkspace $env(MODEL_DIR)/System/Modelo_AMM_26_04_2017.mdl
+
+#Load the rules
+ LoadRules $env(MODEL_DIR)/System/Rules_AMM_26_04_2017.rls
+
+#run Input DMIs
+ InvokeDMI MP_Input
+ InvokeDMI MP_RiversData
+
+# run the simulation
+ StartController
+
+#Print result
+ #GetSlot Analisis.Confiabilidad
+
+ set v [GetSlot Analisis.Confiabilidad]
+
+# set chan [open  "C:/Users/L03054557/Edmundo-ITESM/Proyectos/ProjectoAguaMty/Phase2MTY/ModeloRiverware/Output/Reliability.txt"]
+
+ puts $v
+
+#puts $chan $v
+
+# close $chan
+
+
+ # Print Outputs
+  Output SupplyDemand
+
+# Close the opened model and exit RiverWare
+ CloseWorkspace

@@ -1,0 +1,43 @@
+# Set environment variables
+ set env(MODEL_DIR) C:/Users/L03054557/Edmundo-ITESM/Proyectos/ProjectoAguaMty/Phase2MTY/ModeloRiverware
+ SetEnv MODEL_DIR $env(MODEL_DIR)
+
+ #Diagnostics
+  SetDiagFile $env(MODEL_DIR)/Output/diagnostics.txt
+
+ #Enable comments
+ #EnableInfoDiag 1
+
+# Load the model
+ OpenWorkspace $env(MODEL_DIR)/System/Modelo_AMM_26_04_2017.mdl
+
+#Load the rules
+ LoadRules $env(MODEL_DIR)/System/Rules_AMM_26_04_2017.rls
+
+#run Input DMIs
+ InvokeDMI MP_Input
+ InvokeDMI MP_RiversData
+
+# run the simulation
+ StartController
+
+# Print Outputs
+ Output SupplyDemand
+ Output GroundwaterData
+ Output ReservoirsData
+
+#run Output DMIs
+# InvokeDMI MP_SupplyDemand
+# InvokeDMI MP_ReservoirsData
+# InvokeDMI MP_GroundwaterData
+
+
+#save the model
+# SaveWorkspace $env(MODEL_DIR)/System/Modelo_AMM_04_04_2017.saved.mdl
+
+# Close the opened model and exit RiverWare
+ CloseWorkspace
+
+
+#Get run info
+#GetRunInfo

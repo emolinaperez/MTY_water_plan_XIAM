@@ -1,0 +1,568 @@
+# RiverWare_Ruleset 7.0.5 Patch
+# Created 18:42 December 31, 2017
+# 
+RULESET
+NAME "Rules_AMM_26_12_2017";
+AGENDA_ORDER ASCENDING;
+DESCRIPTION "";
+PRECISION   8;
+BEGIN
+
+  POLICY_GROUP   "Alternativas";
+  DESCRIPTION    "";
+  ACTIVE         TRUE;
+  NAMES_COLOR  "#ff5500";
+  BEGIN
+
+    RULE                 "Rule_Panuco";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Rio Panuco MTY VI.Available For Diversion" [] := IF ( $ "ProjectsTable.x1" [] == 1.00000000 )
+ THEN
+  IF ( $ "Rio Panuco MTY VI.Outflow" [] > $ "Rio Panuco MTY VI.Diversion Capacity" [] )
+  THEN
+   IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Presa La Libertad.Diversion" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + $ "Pozo Obispado.Pumped Flow" [] + $ "Subalveo Rio Conchos.Pumped Flow" [] + $ "Campo Pozos Pajonal.Pumped Flow" [] + $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] + $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [] + $ "Subalveo La Union Gral Teran.Pumped Flow" [] + $ "Vicente Guerrero.Release" [] + $ "Rio Panuco MTY VI.Diversion Capacity" [] )
+   THEN
+    $ "Rio Panuco MTY VI.Diversion Capacity" []
+   ELSE
+    "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] - $ "Pozo Obispado.Pumped Flow" [] - $ "Subalveo Rio Conchos.Pumped Flow" [] - $ "Campo Pozos Pajonal.Pumped Flow" [] - $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] - $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [] - $ "Subalveo La Union Gral Teran.Pumped Flow" [] - $ "Presa La Libertad.Diversion" [] - $ "Vicente Guerrero.Release" [], 0.00000000 "cms" )
+   ENDIF
+  ELSE
+   $ "Rio Panuco MTY VI.Diversion Capacity" [] * 0.10000000
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_Q_Amb_Panuco";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "caudal ambiental.Diversion" [] := $ "Rio Panuco MTY VI.Inflow" [] * 0.10000000;
+
+    END;
+
+    RULE                 "Rule_VGuerrero";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "DiversionObject4.Diversion" [] := IF ( $ "Vicente Guerrero.Pool Elevation" [@"t - 1"] > 131.00000000 "m" )
+ THEN
+  $ "DataObj3.Extracciones_VGuerrero" []
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+      $ "Vicente Guerrero.Release" [] := IF ( $ "ProjectsTable.x2" [] == 1.00000000 )
+ THEN
+  IF ( $ "Vicente Guerrero.Storage" [@"t - 1"] - 1164.00000000 "MCM" >= 12.96000000 "MCM" )
+  THEN
+   IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Presa La Libertad.Diversion" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + $ "Pozo Obispado.Pumped Flow" [] + $ "Subalveo Rio Conchos.Pumped Flow" [] + $ "Campo Pozos Pajonal.Pumped Flow" [] + $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] + $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [] + $ "Subalveo La Union Gral Teran.Pumped Flow" [] + 0.00000000 "cms" + 5.00000000 "cms" )
+   THEN
+    5.00000000 "cms"
+   ELSE
+    "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] - $ "Pozo Obispado.Pumped Flow" [] - $ "Subalveo Rio Conchos.Pumped Flow" [] - $ "Campo Pozos Pajonal.Pumped Flow" [] - $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] - $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [] - $ "Subalveo La Union Gral Teran.Pumped Flow" [] - $ "Presa La Libertad.Diversion" [], 0.00000000 "cms" )
+   ENDIF
+  ELSE
+   5.00000000 "cms" * 0.10000000
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+      $ "Vicente Guerrero.Regulated Spill" [] := IF ( $ "Vicente Guerrero.Storage" [@"t - 1"] > 3910.00000000 "MCM" )
+ THEN
+  "VolumeToFlow"( $ "Vicente Guerrero.Storage" [@"t - 1"] - 3910.00000000 "MCM", @"t" )
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_Libertad";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Presa La Libertad.Diversion" [] := IF ( $ "ProjectsTable.x13" [] == 1.00000000 )
+ THEN
+  IF ( $ "Presa La Libertad.Conservation Pool Storage" [] > 3.88000000 "MCM" )
+  THEN
+   IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + $ "Pozo Obispado.Pumped Flow" [] + $ "Subalveo Rio Conchos.Pumped Flow" [] + $ "Campo Pozos Pajonal.Pumped Flow" [] + $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] + $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [] + $ "Subalveo La Union Gral Teran.Pumped Flow" [] + $ "Presa La Libertad.Diversion Capacity" [] )
+   THEN
+    $ "Presa La Libertad.Diversion Capacity" []
+   ELSE
+    "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] - $ "Pozo Obispado.Pumped Flow" [] - $ "Subalveo Rio Conchos.Pumped Flow" [] - $ "Campo Pozos Pajonal.Pumped Flow" [] - $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] - $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [] - $ "Subalveo La Union Gral Teran.Pumped Flow" [], 0.00000000 "cms" )
+   ENDIF
+  ELSE
+   $ "Presa La Libertad.Diversion Capacity" [] * 0.10000000
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_SubalveoLaUnion";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Subalveo La Union Gral Teran.Pumped Flow" [] := IF ( $ "ProjectsTable.x8" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + $ "Pozo Obispado.Pumped Flow" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + $ "Subalveo Rio Conchos.Pumped Flow" [] + $ "Campo Pozos Pajonal.Pumped Flow" [] + $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] + $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [] + 0.50000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.50000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] - $ "Pozo Obispado.Pumped Flow" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] - $ "Subalveo Rio Conchos.Pumped Flow" [] - $ "Campo Pozos Pajonal.Pumped Flow" [] - $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] - $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [], 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_PozosBallesteros";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Pozos Ballesteros Acuifero Buenos Aires.Pumped Flow" [] := IF ( $ "ProjectsTable.x5" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + $ "Pozo Obispado.Pumped Flow" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + $ "Subalveo Rio Conchos.Pumped Flow" [] + $ "Campo Pozos Pajonal.Pumped Flow" [] + $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] + 0.50000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.50000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] - $ "Pozo Obispado.Pumped Flow" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] - $ "Subalveo Rio Conchos.Pumped Flow" [] - $ "Campo Pozos Pajonal.Pumped Flow" [] - $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [], 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_OfertaTunelSanFranciscoII";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Tunel San Francisco II Sistema Santiago.Pumped Flow" [] := IF ( $ "ProjectsTable.x11" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + $ "Pozo Obispado.Pumped Flow" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + $ "Subalveo Rio Conchos.Pumped Flow" [] + $ "Campo Pozos Pajonal.Pumped Flow" [] + 0.32000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.32000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] - $ "Pozo Obispado.Pumped Flow" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] - $ "Subalveo Rio Conchos.Pumped Flow" [] - $ "Campo Pozos Pajonal.Pumped Flow" [], 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_PozosPajonal";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Campo Pozos Pajonal.Pumped Flow" [] := IF ( $ "ProjectsTable.x7" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + $ "Pozo Obispado.Pumped Flow" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + $ "Subalveo Rio Conchos.Pumped Flow" [] + 0.30000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.30000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] - $ "Pozo Obispado.Pumped Flow" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] - $ "Subalveo Rio Conchos.Pumped Flow" [], 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_SubalveoRioConchos";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Subalveo Rio Conchos.Pumped Flow" [] := IF ( $ "ProjectsTable.x9" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + $ "Pozo Obispado.Pumped Flow" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + 0.50000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.50000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] - $ "Pozo Obispado.Pumped Flow" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [], 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_PozosObispado";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Pozo Obispado.Pumped Flow" [] := IF ( $ "ProjectsTable.x6" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] + 0.10000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.10000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] - $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [], 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_SubalveoRioPilonChapotal";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Subalveo Rio Pilon_Aguas abajo Chapotal.Pumped Flow" [] := IF ( $ "ProjectsTable.x10" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Rescatar Volumenes AMM.Pumped Flow" [] + $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] + 0.30000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.30000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - $ "Rescatar Volumenes AMM.Pumped Flow" [] - $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [], 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_MTYIContrySol";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Pozos Monterrey I y Contry Sol.Pumped Flow" [] := IF ( $ "ProjectsTable.x12" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + 0.00000000 "cms" + 0.00000000 "cms" + $ "Rescatar Volumenes AMM.Pumped Flow" [] + 0.10000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.10000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - 0.00000000 "cms" - 0.00000000 "cms" - $ "Rescatar Volumenes AMM.Pumped Flow" [], 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_RescatarVolumenesAMM";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Rescatar Volumenes AMM.Pumped Flow" [] := IF ( $ "ProjectsTable.x12" [] == 1.00000000 )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + 0.00000000 "cms" + 0.00000000 "cms" + 0.20000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] ) )
+  THEN
+   0.20000000 "cms" * ( 1.00000000 + $ "ProjectsTable.gwfactor" [] )
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - $ "DiversionObject3.Diversion" [] - 0.00000000 "cms" - 0.00000000 "cms", 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+  END;
+
+  POLICY_GROUP   "Operaci?n_Presas";
+  DESCRIPTION    "";
+  ACTIVE         TRUE;
+  BEGIN
+
+    RULE                 "Trasvase";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "El Cuchillo.Regulated Spill" [@"24:00:00 November Max DayOfMonth, Current Year"] := IF ( $ "El Cuchillo.Storage" [@"t - 1"] > $ "DataObj1.NIVEL_CUCHILLO_TRASVASE" [] AND $ "Marte R Gomez.Storage" [@"t - 1"] < 700.00000000 "MCM" )
+ THEN
+  $ "DataObj1.Trasvase 3"
+ ELSE
+  $ "DataObj1.Trasvase 0"
+ ENDIF [];
+
+      $ "El Cuchillo.Regulated Spill" [] := IF ( $ "El Cuchillo.Storage" [@"t - 1"] > 1123.00000000 "MCM" )
+ THEN
+  "VolumeToFlow"( $ "El Cuchillo.Storage" [@"t - 1"] - 1123.00000000 "MCM", @"t" )
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_ElCuchillo";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "DiversionObject3.Diversion" [] := IF ( $ "ProjectsTable.x4" [] == 1.00000000 )
+ THEN
+  IF ( $ "El Cuchillo.Storage" [@"t - 1"] - 202.32000000 "MCM" > 26.80000000 "MCM" )
+  THEN
+   IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "El Cuchillo.Diversion Capacity" [] * 2.09000000 )
+   THEN
+    $ "El Cuchillo.Diversion Capacity" [] * 2.09000000
+   ELSE
+    "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - 0.00000000 "cms", 0.00000000 "cms" )
+   ENDIF
+  ELSE
+   $ "El Cuchillo.Diversion Capacity" [] * 0.10000000
+  ENDIF
+ ELSE
+  IF ( $ "El Cuchillo.Storage" [@"t - 1"] - 202.32000000 "MCM" > 26.80000000 "MCM" )
+  THEN
+   IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "El Cuchillo.Diversion Capacity" [] )
+   THEN
+    $ "El Cuchillo.Diversion Capacity" []
+   ELSE
+    "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - ( $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] ) - $ "DiversionObject1.Diversion" [] - $ "DiversionObject2.Diversion" [] - 0.00000000 "cms", 0.00000000 "cms" )
+   ENDIF
+  ELSE
+   $ "El Cuchillo.Diversion Capacity" [] * 0.10000000
+  ENDIF
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_LasBlancas2";
+    DESCRIPTION          "";
+    ACTIVE               FALSE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Las Blancas.Diversion" [] := IF ( $ "Las Blancas.Storage" [@"t - 1"] > 15.52000000 "MCM" )
+ THEN
+  $ "DataObj1.Trasvase Las Blancas" []
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_LasBlancas";
+    DESCRIPTION          "";
+    ACTIVE               FALSE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Las Blancas.Release" [] := IF ( $ "Las Blancas.Storage" [@"t - 1"] > 15.52000000 "MCM" )
+ THEN
+  0.00000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_MRGomez";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Marte R Gomez.Release" [] := IF ( $ "Marte R Gomez.Storage" [@"t - 1"] > 40.00000000 "MCM" )
+ THEN
+  35.00000000 "MCM/month"
+ ELSE
+  0.00000000 "MCM/month"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_CerroPrieto";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "DiversionObject2.Diversion" [] := IF ( $ "Cerro Prieto.Storage" [@"t - 1"] - 51.66000000 "MCM" > 14.00000000 "MCM" )
+ THEN
+  IF ( $ "Area Metropolitana de Monterrey.Diversion Requested" [] >= $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] + $ "Sistema Santiago Huajuco.Pumped Flow" [] + $ "DiversionObject1.Diversion" [] + $ "Cerro Prieto.Diversion Capacity" [] )
+  THEN
+   $ "Cerro Prieto.Diversion Capacity" []
+  ELSE
+   "Max"( $ "Area Metropolitana de Monterrey.Diversion Requested" [] - $ "Campo Mina.Pumped Flow" [] - $ "Campo Buenos Aires.Pumped Flow" [] - $ "Pozos Area Metropolitana.Pumped Flow" [] - $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] - $ "Sistema Santiago Huajuco.Pumped Flow" [] - $ "DiversionObject1.Diversion" [] - 0.00000000 "cms", 0.00000000 "cms" )
+  ENDIF
+ ELSE
+  $ "Cerro Prieto.Diversion Capacity" [] * 0.10000000
+ ENDIF;
+
+      $ "Cerro Prieto.Regulated Spill" [] := IF ( $ "Cerro Prieto.Storage" [@"t - 1"] > 300.00000000 "MCM" )
+ THEN
+  "VolumeToFlow"( $ "Cerro Prieto.Storage" [@"t - 1"] - 300.00000000 "MCM", @"t" )
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Rule_LaBoca";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "DiversionObject1.Diversion" [] := IF ( $ "La Boca.Storage" [@"t - 1"] - 5.57000000 "MCM" >= 2.46000000 "MCM" )
+ THEN
+  $ "La Boca.Diversion Capacity" []
+ ELSE
+  IF ( $ "La Boca.Storage" [@"t - 1"] < 5.57000000 "MCM" )
+  THEN
+   $ "La Boca.Diversion Capacity" [] * 0.10000000
+  ELSE
+   "VolumeToFlow"( $ "La Boca.Storage" [@"t - 1"] - 5.57000000 "MCM", @"t" )
+  ENDIF
+ ENDIF;
+
+      $ "La Boca.Regulated Spill" [] := IF ( $ "La Boca.Storage" [@"t - 1"] > 39.00000000 "MCM" )
+ THEN
+  "VolumeToFlow"( $ "La Boca.Storage" [@"t - 1"] - 39.00000000 "MCM", @"t" )
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Extracciones_BAires";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Campo Buenos Aires.Pumped Flow" [] := IF ( $ "Campo Buenos Aires.Storage" [@"t - 1"] > 10.00000000 "MCM" )
+ THEN
+  1.98000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Extracciones_Mina";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Campo Mina.Pumped Flow" [] := IF ( $ "Campo Mina.Storage" [@"t - 1"] > 10.00000000 "MCM" )
+ THEN
+  0.84000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Extracciones_AMM";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Pozos Area Metropolitana.Pumped Flow" [] := IF ( $ "Pozos Area Metropolitana.Storage" [@"t - 1"] > 1.00000000 "MCM" )
+ THEN
+  0.87800000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+    RULE                 "Extracciones_Santiago";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Sistema Santiago Huajuco.Pumped Flow" [] := IF ( $ "Sistema Santiago Huajuco.Storage" [@"t - 1"] > 4.00000000 "MCM" )
+ THEN
+  1.10000000 "cms"
+ ELSE
+  0.00000000 "cms"
+ ENDIF;
+
+    END;
+
+  END;
+
+  POLICY_GROUP   "AMM";
+  DESCRIPTION    "";
+  ACTIVE         TRUE;
+  BEGIN
+
+    RULE                 "Demanda Monterrey";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Area Metropolitana de Monterrey.Diversion Requested" [] := $ "Analisis.Demanda Monterrey" [] - $ "ProjectsTable.x14" [] * 1.00000000 "cms" - $ "ProjectsTable.x15" [] * 1.00000000 "cms" - $ "ProjectsTable.x3" [] * 5.00000000 "cms";
+
+    END;
+
+    RULE                 "Agua derivada a Pesqueria";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Plantas de Tratamiento.Normal Flow" [] := $ "Plantas de Tratamiento.Gage Inflow" [] - $ "Plantas de Tratamiento.Condition One" [] + $ "DataObj2.Pozos Privados" [];
+
+    END;
+
+    RULE                 "Agua tratada a la industria";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Plantas de Tratamiento.Condition One" [] := $ "Plantas de Tratamiento.Gage Inflow" [] * 0.10000000;
+
+    END;
+
+    RULE                 "Oferta total actual";
+    DESCRIPTION          "";
+    ACTIVE               TRUE;
+    RULE_EXEC_CONSTRAINT TRUE;
+    BEGIN
+
+      $ "Area Metropolitana de Monterrey.Incoming Available Water" [] := $ "DiversionObject1.Diversion" [] + $ "DiversionObject2.Diversion" [] + $ "DiversionObject3.Diversion" [] + $ "Campo Mina.Pumped Flow" [] + $ "Campo Buenos Aires.Pumped Flow" [] + ( $ "Pozos Area Metropolitana.Pumped Flow" [] + $ "Area Metropolitana de Monterrey.Available Supplemental Water" [] ) + $ "Sistema Santiago Huajuco.Pumped Flow" [];
+
+    END;
+
+  END;
+
+END

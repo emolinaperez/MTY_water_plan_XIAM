@@ -1,0 +1,55 @@
+#Set environment variables
+ set env(MODEL_DIR) C:/Users/L03054557/Edmundo-ITESM/Proyectos/ProjectoAguaMty/Phase2MTY/ModeloRiverware
+ SetEnv MODEL_DIR $env(MODEL_DIR)
+
+#Load the model
+ OpenWorkspace $env(MODEL_DIR)/System/Modelo_AMM_26_04_2017_test.mdl
+
+#Load the rules
+ LoadRules $env(MODEL_DIR)/System/Rules_AMM_26_04_2017_test.rls
+
+#input x portfolio into riverware model
+ set x1 0.0
+ set x2 0.0
+ set x3 0.0
+ set x4 0.0
+ set x5 0.0
+ set x6 0.0
+ set x7 0.0
+ set x8 0.0
+ set x9 0.0
+ set x10 0.0
+ set x11 0.0
+ set x12 0.0
+ set x13 0.0
+
+ SetSlot ProjectsTable.x1 $x1
+ SetSlot ProjectsTable.x2 $x2
+ SetSlot ProjectsTable.x3 $x3
+ SetSlot ProjectsTable.x4 $x4
+ SetSlot ProjectsTable.x5 $x5
+ SetSlot ProjectsTable.x6 $x6
+ SetSlot ProjectsTable.x7 $x7
+ SetSlot ProjectsTable.x8 $x8
+ SetSlot ProjectsTable.x9 $x9
+ SetSlot ProjectsTable.x10 $x10
+ SetSlot ProjectsTable.x11 $x11
+ SetSlot ProjectsTable.x12 $x12
+ SetSlot ProjectsTable.x13 $x13
+
+#run Input DMIs
+ InvokeDMI MP_Input
+ InvokeDMI MP_RiversData
+
+# run the simulation
+ StartController
+
+#Print result
+ set v [GetSlot Analisis.Confiabilidad]
+ puts $v
+
+#Print Outputs
+  Output SupplyDemand
+
+# Close the opened model and exit RiverWare
+ CloseWorkspace
